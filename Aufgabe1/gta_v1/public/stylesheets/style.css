@@ -109,14 +109,13 @@ a {
 /* ### TODO ### Styles for Header Component */
 
 /* ... your code here ... */
-header {
+.header {
   background-color: lightgrey;
   border: #666;
   display:flex;
   flex-direction: column;
   justify-content: space-around;
   padding: 30px;
-  margin: flex;
 }
 
 .header__image {
@@ -125,6 +124,7 @@ header {
 }
 
 .header__title {
+  width: 20%;
   text-align: center;
 }
 
@@ -133,17 +133,9 @@ header {
 /* ... your code here ... */
 
 .main{
-  margin-left: 2%;
+  margin-top: 2%;
+  margin-left: 5%;
   display: flex;
-}
-
-.main__discovery {
-  background-color: #00B7FF;
-}
-
-
-.main__tagging {
-  background-color: red;
 }
 
 input{
@@ -153,7 +145,6 @@ input{
 
 fieldset{
   padding: 10px;
-  display: block;
 }
 
 /* ### TODO ### Styles for Tagging component */
@@ -163,14 +154,25 @@ fieldset{
 
 /* ### TODO ### Styles for Discovery component */
 
-/* ... your code here ... */
 
 #discoveryFilterForm {
   padding: 20px;
 }
 
-.discovery__results li {
-  border: #00B7FF;
+.discovery__wrapper {
+  display: flex;
+}
+
+.discovery__map {
+  margin-left: 5%;
+}
+
+
+li { /*Unsure how to specifically call the li's in discovery*/
+  background-color: lightgrey;
+  display: block;
+  margin-bottom: 5%;
+  padding: 20px;
 }
 
 
@@ -182,16 +184,7 @@ fieldset{
 
 .footer{
   background-color: lightgrey;
-  border: #666;
   padding: 2%;
-}
-
-li {
-  background-color: lightgrey;
-  width: 13%;
-  display: block;
-  border: blue;
-  padding: 20px;
 }
 
 /* ### TODO ### Media Queries */
