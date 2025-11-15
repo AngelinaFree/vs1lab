@@ -132,6 +132,20 @@ header {
 
 /* ... your code here ... */
 
+.main{
+  margin-left: 2%;
+  display: flex;
+}
+
+.main__discovery {
+  background-color: #00B7FF;
+}
+
+
+.main__tagging {
+  background-color: red;
+}
+
 input{
   padding: 10px;
   display: block;
@@ -146,10 +160,6 @@ fieldset{
 
 /* ... your code here ... */
 
-#tag-form {
-  padding: 20px;
-}
-
 
 /* ### TODO ### Styles for Discovery component */
 
@@ -162,6 +172,8 @@ fieldset{
 .discovery__results li {
   border: #00B7FF;
 }
+
+
 
 
 /* ### TODO ### Styles for Footer Component */
@@ -178,7 +190,7 @@ li {
   background-color: lightgrey;
   width: 13%;
   display: block;
-  border: #666;
+  border: blue;
   padding: 20px;
 }
 

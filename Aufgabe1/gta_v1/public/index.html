@@ -22,15 +22,17 @@
         
     </header>
 
-    <main class="main">
-        <section class="main__tagging tagging">
+    <main class="main row">
+        <section class="main__tagging tagging col-2">
+
+            <div>
             <h2>Tagging</h2>
 
             <!-- ############### VS1Lab 1a Form 1 Start -->
-            <form id="tag-form" action="/tagging" method="post">
+            <form class="tagging" id="tag-form" action="/tagging" method="post">
 
                 <!-- ... your code here ... -->
-                 <fieldset class="col-1">
+                 <fieldset>
                     <legend>Tagging: </legend>
                     
                     <label for="latitude">Latitude:</label><br>
@@ -49,18 +51,21 @@
                  </fieldset>
 
             </form>
+            </div>
             <!-- ############### VS1Lab 1a Form 1 End -->
 
         </section>
 
-        <section class="main__discovery discovery">
+        <section class="main__discovery discovery col-7">
+
+            <div>
             <h2 class="discovery__title">Discovery</h2>
 
             <!-- ############### VS1Lab 1a Form 2 Start -->
-            <form class="discovery__search" id="discoveryFilterForm" action="/discovery" method="post">
+            <form id="discoveryFilterForm" action="/discovery" method="post">
 
                 <!-- ... your code here ... -->
-                 <fieldset class="col-1">
+                 <fieldset>
                     <legend>Searching for: </legend>
 
                     <input type="hidden"  name="latitude" id="discoveryLatitude">
@@ -74,9 +79,10 @@
                 </fieldset>
 
             </form>
+            </div>
             <!-- ############### VS1Lab 1a Form 2 End -->
 
-            <div class="discovery__wrapper">
+            <div class="discovery__wrapper col-2">
                 <div class="discovery__taglist">
                     <ul class="discovery__results" id="discoveryResults">
                         <li>Castle (49.01379, 8.404435) #sight</li>
