@@ -89,6 +89,7 @@ class MapManager {
             'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; ' + mapLink + ' Contributors'}).addTo(this.#map);
         this.#markers = L.layerGroup().addTo(this.#map);
+
     }
 
     /**
@@ -118,7 +119,37 @@ class MapManager {
  */
 // ... your code here ...
 
+function updateLocation() {
+    const lh = new LocationHelper('','');
+    const mm = new MapManager();
+
+    // Teilaufgabe 1
+
+    //findLocation();
+
+    // Vetting longitude & latitude
+    const longitude = 3;
+    const latitude = 10;
+
+    console.log(longitude + " & " + latitude);
+
+    // überschreiben der values WIP
+    document.getElementById("taggingLongitude").innerHTML = this.longitude;
+    document.getElementById("taggingLatitude").innerHTML = this.latitude;
+
+    // Teilaufgabe 2
+
+    //document.getElementById("mapView").remove;
+
+    mm.initMap(this.latitude, this.longitude);
+    mm.updateMarkers(this.latitude, this.longitude);
+    
+}
+
+
 // Wait for the page to fully load its DOM content, then call updateLocation
+
 document.addEventListener("DOMContentLoaded", () => {
     alert("Please change the script 'geotagging.js'");
 });
+updateLocation();
