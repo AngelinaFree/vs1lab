@@ -41,9 +41,8 @@ const geoTagStore = new GeoTagStore();
  */
 
 router.get('/', (req, res) => {
-  let store = new GeoTagStore;
   res.render('index', {
-    taglist: store.getGeoTags(),
+    taglist: [],
     latitude: "",
     longitude: ""
   })
@@ -63,7 +62,22 @@ router.get('/', (req, res) => {
  * If 'latitude' and 'longitude' are available, it will be further filtered based on radius.
  */
 
-// TODO: ... your code here ...
+router.get('/api/geotags', (req, res) => {
+  let latitude = req.query.latitude ? parseFloat(req.query.latitude) : undefined;
+  let longitude = req.query.longitude ? parseFloat(req.query.longitude) : undefined;
+  let searchTerm = req.query.searchterm || null;
+
+  if (latitude < -180 || latitude > 180) {
+    latitude = undefined;
+  }
+  if (longitude < -90 || longitude > 90) {
+    longitude = undefined;
+  }
+  searchTerm = 'build';
+
+  const nearbyGeoTags = geoTagStore.searchNearbyGeoTags(searchTerm, latitude, longitude);
+  res.json(nearbyGeoTags);
+});
 
 
 /**
@@ -77,7 +91,23 @@ router.get('/', (req, res) => {
  * The new resource is rendered as JSON in the response.
  */
 
-// TODO: ... your code here ...
+router.post('/api/geotags', (req, res) => {
+  let latitude = req.query.latitude ? parseFloat(req.query.latitude) : undefined;
+  let longitude = req.query.longitude ? parseFloat(req.query.longitude) : undefined;
+
+  if (latitude < -180 || latitude > 180) {
+    latitude = undefined;
+  }
+  if (longitude < -90 || longitude > 90) {
+    longitude = undefined;
+  }
+  
+  const newGeoTag = geoTagStore.addGeoTag(new GeoTag (latitude, longitude, req.body.name, req.body.hashtag));
+
+  res.setHeader('Location', '/api/geotags/${newGeoTag.getId()}');
+  res.status(201);
+  res.json(newGeoTag);
+});
 
 
 /**
