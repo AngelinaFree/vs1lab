@@ -48,23 +48,38 @@ class InMemoryGeoTagStore{
         this.#geoTags = this.#geoTags.filter(gt => gt.getName() !== geoTag.getName());
     }
 
-    getNearbyGeoTags(latitude, longitude) {
-        const radius = 1000;
-        let nearbyGeoTags = [];
+    /*
+        returns all geotags in the vicinity of a given coordinate pair
+    */
+    getNearbyGeoTags(latitude, longitude, tags = this.#geoTags) {
+        const radius = 10;
 
-
-        this.#geoTags.forEach(element => {
-            if (this.haversineDistance(latitude, longitude, element.getLatitude(), element.getLongitude()) <= radius) nearbyGeoTags.push(element);
+        return tags.filter(element => {
+            this.haversineDistance(latitude, longitude, element.getLatitude(), element.getLongitude()) <= radius;
         });
-        return nearbyGeoTags;
     }
 
-    searchNearbyGeoTags(keyword, latitude, longitude) {
+    /*
+        return all geotags with the given keyword. If coordinates are given, only getoags in the specified radius will be returned
+    */
+    searchNearbyGeoTags(keyword, latitude = null, longitude = null) {
+        if (!keyword) return [];
+
+        keyword = keyword.toLowerCase();
+        let searchedGeoTags = this.#geoTags.filter(element => {
+            return element.getName().toLowerCase().includes(keyword) ||
+            element.getHashtag().toLowerCase().includes(keyword);
+        });
+        if (latitude === null || longitude === null) return searchedGeoTags;
+        
+        return this.getNearbyGeoTags(latitude, longitude, searchedGeoTags);
+
+        /*
         let nearbyGeoTags = this.getNearbyGeoTags(latitude, longitude);
         if (!keyword) return nearbyGeoTags;
         keyword = keyword.toLowerCase();
-
         return nearbyGeoTags.filter(element => element.getName().toLowerCase().includes(keyword) || element.getHashtag().toLowerCase().includes(keyword));
+        */
     }
 
     getGeoTags() {
