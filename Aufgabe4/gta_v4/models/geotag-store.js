@@ -44,8 +44,8 @@ class InMemoryGeoTagStore{
         this.#counter++;
     }
 
-    removeGeoTag(geoTag) {
-        this.#geoTags = this.#geoTags.filter(gt => gt.getName() !== geoTag.getName());
+    removeGeoTagById(id) {
+        this.#geoTags = this.#geoTags.filter(gt => gt.getId() !== Number(id));
     }
 
     /*
@@ -90,10 +90,9 @@ class InMemoryGeoTagStore{
     }
 
     getGeoTagById(id) {
-        var geotags = this.#geoTags.filter(element => element.getId() === id);
-        console.log(id);
+        var geotags = this.#geoTags.filter(element => element.getId() === Number(id));
         if (geotags.length !== 1) {
-            console.log('id not found');
+            console.log('getGeoTagById wrong length');
         }
         return geotags[0];
     }
