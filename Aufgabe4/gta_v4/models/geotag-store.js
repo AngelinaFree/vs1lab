@@ -89,6 +89,31 @@ class InMemoryGeoTagStore{
         return this.#geoTags;
     }
 
+    getGeoTagById(id) {
+        var geotags = this.#geoTags.filter(element => element.getId() === id);
+        console.log(id);
+        if (geotags.length !== 1) {
+            console.log('id not found');
+        }
+        return geotags[0];
+    }
+
+    changeGeotagById(oldId, newLatitude, newLongitude, newName, newHashtag) {
+        var geotags = this.#geoTags.filter(element => element.getId() === oldId);
+        console.log(id);
+        if (geotags.length !== 1) {
+            console.log('id not found');
+        }
+        oldGeoTag = geotags[0];
+        if (newLatitude !== undefined && newLongitude !== undefined && newName !== undefined && newHashtag !== undefined) {
+            oldGeoTag.setLatitude(newLatitude);
+            oldGeoTag.setLongitude(newLongitude);
+            oldGeoTag.setName(newName);
+            oldGeoTag.setHashtag(newHashtag);
+        }
+        return oldGeoTag;
+    }
+
     haversineDistance(lat1, long1, lat2, long2) {
         lat1 = this.toRad(lat1);
         long1 = this.toRad(long1);
@@ -106,14 +131,6 @@ class InMemoryGeoTagStore{
 
     toRad(grad){
         return grad * Math.PI / 180;
-    }
-
-    print() {
-        console.log("GeoTags:\n")
-        this.#geoTags.forEach(element => {
-            console.log(element);
-        })
-        console.log("\n");
     }
 }
 

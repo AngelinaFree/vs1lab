@@ -119,7 +119,14 @@ router.post('/api/geotags', (req, res) => {
  * The requested tag is rendered as JSON in the response.
  */
 
-// TODO: ... your code here ...
+router.get('/api/geotags/:id', (req, res) => {
+  let id = req.params.id ? parseInt(req.params.id) : undefined;
+  if (id === undefined || id < 0) {
+    res.json([]);
+    return
+  }
+  res.json(geoTagStore.getGeoTagById(id));
+});
 
 
 /**
@@ -136,7 +143,28 @@ router.post('/api/geotags', (req, res) => {
  * The updated resource is rendered as JSON in the response. 
  */
 
-// TODO: ... your code here ...
+router.put('/api/geotags/:id', (req, res) => {
+  let id = req.params.id ? parseInt(req.params.id) : undefined;
+  if (id === undefined || id < 0) {
+    res.json([]);
+    return;
+  }
+
+  const newLatitude = req.body.latitude ? parseFloat(req.body.latitude) : undefined;
+  if (latitude < -180 || latitude > 180) {
+    latitude = undefined;
+  }
+
+  const newLongitude = req.body.longitude ? parseFloat(req.body.longitude) : undefined;
+  if (longitude < -90 || longitude > 90) {
+    longitude = undefined;
+  }
+  const newName = req.body.name === '' ? undefined : req.body.name;
+
+  const newHashtag = req.body.hashtag === '' ? undefined : req.body.hashtag;
+  
+  res.json(geoTagStore.changeGeotagById(id, newLatitude, newLongitude, newName, newHashtag));
+});
 
 
 /**
@@ -150,6 +178,17 @@ router.post('/api/geotags', (req, res) => {
  * The deleted resource is rendered as JSON in the response.
  */
 
-// TODO: ... your code here ...
+router.delete('/api/geotags/:id', (req, res) => {
+  let id = req.params.id ? req.params.id : undefined;
+  if (id === undefined || id < 0) {
+    res.json([]);
+    return;
+  }
+
+  const deletedGeotag = getGeoTagById(id);
+  geoTagStore.removeGeoTagById(id);
+  res.json(deletedGeotag);
+
+});
 
 module.exports = router;
