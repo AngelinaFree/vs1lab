@@ -54,9 +54,8 @@ class InMemoryGeoTagStore{
     */
     getNearbyGeoTags(latitude, longitude, tags = this.#geoTags) {
         const radius = 10;
-
         return tags.filter(element => {
-            this.haversineDistance(latitude, longitude, element.getLatitude(), element.getLongitude()) <= radius;
+            return this.haversineDistance(latitude, longitude, element.getLatitude(), element.getLongitude()) <= radius;
         });
     }
 
@@ -65,7 +64,6 @@ class InMemoryGeoTagStore{
     */
     searchNearbyGeoTags(keyword, latitude, longitude) {
         var searchedGeoTags = this.#geoTags;
-        console.log("HIER SACHEN: " + keyword + " & " + longitude +  " & "+ latitude);
         if (keyword) {
         keyword = keyword.toLowerCase();
         searchedGeoTags = searchedGeoTags.filter(element => {
@@ -75,7 +73,7 @@ class InMemoryGeoTagStore{
         }
 
         if (latitude && longitude) return this.getNearbyGeoTags(latitude, longitude, searchedGeoTags);
-        
+
         return searchedGeoTags;
     }
 
