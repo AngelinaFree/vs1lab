@@ -60,7 +60,7 @@ async function discovery() {
     let searchterm = document.getElementById("discoverySearch").value;
     var response = (await fetch(`http://localhost:3000/api/geotags?latitude=${latitude}&longitude=${longitude}&searchterm=${searchterm}`));
     var taglist = await response.json();
-    console.log(data);
+    console.log(taglist);
 }
 // Wait for the page to fully load its DOM content, then call updateLocation
 document.addEventListener("DOMContentLoaded", () => {
