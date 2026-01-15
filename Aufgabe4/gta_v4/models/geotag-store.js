@@ -42,6 +42,7 @@ class InMemoryGeoTagStore{
         geoTag.setId(this.#counter);
         this.#geoTags.push(geoTag);
         this.#counter++;
+        return geoTag;
     }
 
     removeGeoTagById(id) {
@@ -53,36 +54,32 @@ class InMemoryGeoTagStore{
     */
     getNearbyGeoTags(latitude, longitude, tags = this.#geoTags) {
         const radius = 10;
-
         return tags.filter(element => {
-            this.haversineDistance(latitude, longitude, element.getLatitude(), element.getLongitude()) <= radius;
+            return this.haversineDistance(latitude, longitude, element.getLatitude(), element.getLongitude()) <= radius;
         });
     }
 
     /*
         return all geotags with the given keyword. If coordinates are given, only getoags in the specified radius will be returned
     */
+<<<<<<< HEAD
     searchNearbyGeoTags(keyword, latitude = null, longitude = null) {
         var searchedGeoTags=this.#geoTags;
+=======
+    searchNearbyGeoTags(keyword, latitude, longitude) {
+        var searchedGeoTags = this.#geoTags;
+>>>>>>> rejaA4.2.1
         if (keyword) {
         keyword = keyword.toLowerCase();
         searchedGeoTags = searchedGeoTags.filter(element => {
             return element.getName().toLowerCase().includes(keyword) ||
             element.getHashtag().toLowerCase().includes(keyword);
         });
-        } else {
-            searchedGeoTags = this.#geoTags;
         }
-        if (latitude === null || longitude === null) return searchedGeoTags;
-        
-        return this.getNearbyGeoTags(latitude, longitude, searchedGeoTags);
 
-        /*
-        let nearbyGeoTags = this.getNearbyGeoTags(latitude, longitude);
-        if (!keyword) return nearbyGeoTags;
-        keyword = keyword.toLowerCase();
-        return nearbyGeoTags.filter(element => element.getName().toLowerCase().includes(keyword) || element.getHashtag().toLowerCase().includes(keyword));
-        */
+        if (latitude && longitude) return this.getNearbyGeoTags(latitude, longitude, searchedGeoTags);
+
+        return searchedGeoTags;
     }
 
     getGeoTags() {
@@ -98,13 +95,12 @@ class InMemoryGeoTagStore{
     }
 
     changeGeotagById(oldId, newLatitude, newLongitude, newName, newHashtag) {
-        var geotags = this.#geoTags.filter(element => element.getId() === oldId);
-        console.log(id);
+        var geotags = this.#geoTags.filter(element => element.getId() === Number(oldId));
         if (geotags.length !== 1) {
             console.log('id not found');
         }
-        oldGeoTag = geotags[0];
-        if (newLatitude !== undefined && newLongitude !== undefined && newName !== undefined && newHashtag !== undefined) {
+        let oldGeoTag = geotags[0];
+        if (newLatitude && newLongitude && newName) {
             oldGeoTag.setLatitude(newLatitude);
             oldGeoTag.setLongitude(newLongitude);
             oldGeoTag.setName(newName);

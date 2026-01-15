@@ -63,8 +63,8 @@ router.get('/', (req, res) => {
  */
 
 router.get('/api/geotags', (req, res) => {
-  let latitude = req.query.latitude ? parseFloat(req.query.latitude) : undefined;
-  let longitude = req.query.longitude ? parseFloat(req.query.longitude) : undefined;
+  let latitude = parseFloat(req.query.latitude)
+  let longitude = parseFloat(req.query.longitude);
   let searchTerm = req.query.searchterm;
 
   if (latitude < -180 || latitude > 180) {
@@ -73,7 +73,7 @@ router.get('/api/geotags', (req, res) => {
   if (longitude < -90 || longitude > 90) {
     longitude = undefined;
   }
-
+  
   const nearbyGeoTags = geoTagStore.searchNearbyGeoTags(searchTerm, latitude, longitude);
   console.log(nearbyGeoTags);
   console.log(searchTerm);
@@ -93,8 +93,10 @@ router.get('/api/geotags', (req, res) => {
  */
 
 router.post('/api/geotags', (req, res) => {
-  let latitude = req.query.latitude ? parseFloat(req.query.latitude) : undefined;
-  let longitude = req.query.longitude ? parseFloat(req.query.longitude) : undefined;
+  let latitude = parseFloat(req.body.latitude);
+  let longitude = parseFloat(req.body.longitude);
+  let name = req.body.name;
+  let hashtag = req.hashtag;
 
   if (latitude < -180 || latitude > 180) {
     latitude = undefined;
@@ -102,12 +104,20 @@ router.post('/api/geotags', (req, res) => {
   if (longitude < -90 || longitude > 90) {
     longitude = undefined;
   }
-  
-  const newGeoTag = geoTagStore.addGeoTag(new GeoTag (latitude, longitude, req.body.name, req.body.hashtag));
 
-  res.setHeader('Location', '/api/geotags/${newGeoTag.getId()}');
-  res.status(201);
-  res.json(newGeoTag);
+  if ( !name || (!latitude || !longitude)) {
+      res.render("error", {
+      message: 'name and latitude and longitude is not given',
+      error: {
+        status: '404',
+        stack: ''
+      }
+    });
+  }
+  
+  const newGeoTag = geoTagStore.addGeoTag(new GeoTag (latitude, longitude, name, hashtag));
+
+  res.header('Location', '/api/geotags/${newGeoTag.getId()}').json(newGeoTag);
 });
 
 
@@ -122,11 +132,18 @@ router.post('/api/geotags', (req, res) => {
  */
 
 router.get('/api/geotags/:id', (req, res) => {
-  let id = req.params.id ? parseInt(req.params.id) : undefined;
-  if (id === undefined || id < 0) {
-    res.json([]);
-    return
+  let id = parseInt(req.params.id);
+  if (!id || id < 0) {
+    res.status(404);
+    res.render("error", {
+      message: 'id not given',
+      error: {
+        status: '404',
+        stack: ''
+      }
+    });
   }
+
   res.json(geoTagStore.getGeoTagById(id));
 });
 
@@ -146,24 +163,43 @@ router.get('/api/geotags/:id', (req, res) => {
  */
 
 router.put('/api/geotags/:id', (req, res) => {
-  let id = req.params.id ? parseInt(req.params.id) : undefined;
+  let id = parseInt(req.params.id);
   if (id === undefined || id < 0) {
-    res.json([]);
-    return;
+    res.status(404);
+    res.render("error", {
+      message: 'id not given',
+      error: {
+        status: '404',
+        stack: ''
+      }
+    });
   }
 
-  const newLatitude = req.body.latitude ? parseFloat(req.body.latitude) : undefined;
-  if (latitude < -180 || latitude > 180) {
-    latitude = undefined;
+  const newLatitude = parseFloat(req.body.latitude);
+  if (newLatitude < -180 || newLatitude > 180) {
+    newLatitude = undefined;
   }
 
-  const newLongitude = req.body.longitude ? parseFloat(req.body.longitude) : undefined;
-  if (longitude < -90 || longitude > 90) {
-    longitude = undefined;
+  const newLongitude = parseFloat(req.body.longitude);
+  if (newLongitude < -90 || newLongitude > 90) {
+    newLongitude = undefined;
   }
-  const newName = req.body.name === '' ? undefined : req.body.name;
+  const newName = req.body.name;
 
-  const newHashtag = req.body.hashtag === '' ? undefined : req.body.hashtag;
+  const newHashtag = req.body.hashtag;
+
+  console.log("TEST: " + newName + " & " + newHashtag + " & " + newLatitude + " & " + newLongitude );
+
+  if ( !newName || (!newLatitude || !newLongitude)) {
+    res.status(404);
+    res.render("error", {
+      message: 'name and latitude and longitude is not given',
+      error: {
+        status: '404',
+        stack: ''
+      }
+    });
+  }
   
   res.json(geoTagStore.changeGeotagById(id, newLatitude, newLongitude, newName, newHashtag));
 });
@@ -181,9 +217,18 @@ router.put('/api/geotags/:id', (req, res) => {
  */
 
 router.delete('/api/geotags/:id', (req, res) => {
-  let id = req.params.id ? req.params.id : undefined;
+  let id = req.params.id;
   if (id === undefined || id < 0) {
-    res.json([]);
+    if (id === undefined || id < 0) {
+      res.status(404);
+      res.render("error", {
+      message: 'id not given',
+      error: {
+        status: 404,
+        stack: ''
+      }
+    });
+  }
     return;
   }
 
