@@ -58,9 +58,22 @@ async function discovery() {
     let latitude = document.getElementById("discoveryLatitude").value;
     let longitude = document.getElementById("discoveryLongitude").value;
     let searchterm = document.getElementById("discoverySearch").value;
-    var response = (await fetch(`http://localhost:3000/api/geotags?latitude=${latitude}&longitude=${longitude}&searchterm=${searchterm}`));
-    var taglist = await response.json();
-    console.log(taglist);
+    let response = (await fetch(`http://localhost:3000/api/geotags?latitude=${latitude}&longitude=${longitude}&searchterm=${searchterm}`));
+    let taglist = await response.json();
+    console.log(taglist.constructor === Array);
+    if(taglist.length) { 
+       let uL =  document.getElementById("discoveryResults");
+       let newUl = uL.cloneNode(false);
+       taglist.forEach(element => {
+        var li = document.createElement("li");
+        li.appendChild(document.createTextNode(`${element.name} (${element.latitude},${element.longitude}) ${element.hashtag}`));
+        newUl.appendChild(li)
+       });
+       uL.parentNode.replaceChild(newUl,uL);
+
+    }
+    
+    document.getElementById("map").dataset.tag = JSON.stringify(taglist);
 }
 // Wait for the page to fully load its DOM content, then call updateLocation
 document.addEventListener("DOMContentLoaded", () => {
