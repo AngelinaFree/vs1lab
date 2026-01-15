@@ -53,7 +53,7 @@ class InMemoryGeoTagStore{
         returns all geotags in the vicinity of a given coordinate pair
     */
     getNearbyGeoTags(latitude, longitude, tags = this.#geoTags) {
-        const radius = 10;
+        const radius = 1000;
         return tags.filter(element => {
             return this.haversineDistance(latitude, longitude, element.getLatitude(), element.getLongitude()) <= radius;
         });
@@ -62,13 +62,8 @@ class InMemoryGeoTagStore{
     /*
         return all geotags with the given keyword. If coordinates are given, only getoags in the specified radius will be returned
     */
-<<<<<<< HEAD
-    searchNearbyGeoTags(keyword, latitude = null, longitude = null) {
-        var searchedGeoTags=this.#geoTags;
-=======
     searchNearbyGeoTags(keyword, latitude, longitude) {
         var searchedGeoTags = this.#geoTags;
->>>>>>> rejaA4.2.1
         if (keyword) {
         keyword = keyword.toLowerCase();
         searchedGeoTags = searchedGeoTags.filter(element => {
