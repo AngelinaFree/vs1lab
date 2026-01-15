@@ -21,7 +21,7 @@ const router = express.Router();
 const GeoTag = require('../models/geotag');
 
 /**
- * The module "geotag-store" exports a class GeoTagStore. 
+ * The module "geotag-store" exports a class GeoTagStore.  
  * It provides an in-memory store for geotag objects.
  */
 // eslint-disable-next-line no-unused-vars
@@ -75,6 +75,8 @@ router.get('/api/geotags', (req, res) => {
   }
 
   const nearbyGeoTags = geoTagStore.searchNearbyGeoTags(searchTerm, latitude, longitude);
+  console.log(nearbyGeoTags);
+  console.log(searchTerm);
   res.json(nearbyGeoTags);
 });
 

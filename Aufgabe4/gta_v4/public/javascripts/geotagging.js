@@ -30,7 +30,6 @@ function updateLocation() {
         if (newLatitude !== latitude || newLongtitude !== longitude) {
 
             LocationHelper.findLocation((locationHelper) => {
-
                 longitude = locationHelper.longitude;
                 latitude = locationHelper.latitude;
 
@@ -41,15 +40,35 @@ function updateLocation() {
 
                 const mapManager = new MapManager();
                 mapManager.initMap(latitude, longitude);
-                mapManager.updateMarkers(latitude, longitude, JSON.parse(document.getElementById("map").getAttribute("data-tags")));
+                fetch(`http://localhost:3000/api/geotags?latitude=${latitude}&longtitude=${longitude}`)
+                .then(response => response.json())
+                .then(data => {
+                    mapManager.updateMarkers(latitude, longitude, data)
+                    })
             });
 
         }
 }
 
+async function submitTag() {
+    fetch(websiteURL + "/api/");
+}
+
+async function discovery() {
+    let latitude = document.getElementById("discoveryLatitude").value;
+    let longitude = document.getElementById("discoveryLongitude").value;
+    let searchterm = document.getElementById("discoverySearch").value;
+    var response = (await fetch(`http://localhost:3000/api/geotags?latitude=${latitude}&longitude=${longitude}&searchterm=${searchterm}`));
+    var taglist = await response.json();
+    console.log(data);
+}
 // Wait for the page to fully load its DOM content, then call updateLocation
 document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("mapView").remove();
     document.getElementById("mapSpan").remove();
+    document.getElementById("discoveryFilterForm").addEventListener("submit", event => {
+        event.preventDefault();
+        discovery();
+    });
     updateLocation();
 });
