@@ -42,33 +42,65 @@ class InMemoryGeoTagStore{
         geoTag.setId(this.#counter);
         this.#geoTags.push(geoTag);
         this.#counter++;
+        return geoTag;
     }
 
-    removeGeoTag(geoTag) {
-        this.#geoTags = this.#geoTags.filter(gt => gt.getName() !== geoTag.getName());
+    removeGeoTagById(id) {
+        this.#geoTags = this.#geoTags.filter(gt => gt.getId() !== Number(id));
     }
 
-    getNearbyGeoTags(latitude, longitude) {
+    /*
+        returns all geotags in the vicinity of a given coordinate pair
+    */
+    getNearbyGeoTags(latitude, longitude, tags = this.#geoTags) {
         const radius = 1000;
-        let nearbyGeoTags = [];
-
-
-        this.#geoTags.forEach(element => {
-            if (this.haversineDistance(latitude, longitude, element.getLatitude(), element.getLongitude()) <= radius) nearbyGeoTags.push(element);
+        return tags.filter(element => {
+            return this.haversineDistance(latitude, longitude, element.getLatitude(), element.getLongitude()) <= radius;
         });
-        return nearbyGeoTags;
     }
 
+    /*
+        return all geotags with the given keyword. If coordinates are given, only getoags in the specified radius will be returned
+    */
     searchNearbyGeoTags(keyword, latitude, longitude) {
-        let nearbyGeoTags = this.getNearbyGeoTags(latitude, longitude);
-        if (!keyword) return nearbyGeoTags;
+        var searchedGeoTags = this.#geoTags;
+        if (keyword) {
         keyword = keyword.toLowerCase();
+        searchedGeoTags = this.#geoTags.filter(element => {
+            return element.getName().toLowerCase().includes(keyword) ||
+            element.getHashtag().toLowerCase().includes(keyword);
+        });
+        }
 
-        return nearbyGeoTags.filter(element => element.getName().toLowerCase().includes(keyword) || element.getHashtag().toLowerCase().includes(keyword));
+        if (latitude && longitude && searchedGeoTags.length !== 0) return this.getNearbyGeoTags(latitude, longitude, searchedGeoTags);
+        return searchedGeoTags;
     }
 
     getGeoTags() {
         return this.#geoTags;
+    }
+
+    getGeoTagById(id) {
+        var geotags = this.#geoTags.filter(element => element.getId() === Number(id));
+        if (geotags.length !== 1) {
+            console.log('getGeoTagById wrong length');
+        }
+        return geotags[0];
+    }
+
+    changeGeotagById(oldId, newLatitude, newLongitude, newName, newHashtag) {
+        var geotags = this.#geoTags.filter(element => element.getId() === Number(oldId));
+        if (geotags.length !== 1) {
+            console.log('id not found');
+        }
+        let oldGeoTag = geotags[0];
+        if (newLatitude && newLongitude && newName) {
+            oldGeoTag.setLatitude(newLatitude);
+            oldGeoTag.setLongitude(newLongitude);
+            oldGeoTag.setName(newName);
+            oldGeoTag.setHashtag(newHashtag);
+        }
+        return oldGeoTag;
     }
 
     haversineDistance(lat1, long1, lat2, long2) {
@@ -88,14 +120,6 @@ class InMemoryGeoTagStore{
 
     toRad(grad){
         return grad * Math.PI / 180;
-    }
-
-    print() {
-        console.log("GeoTags:\n")
-        this.#geoTags.forEach(element => {
-            console.log(element);
-        })
-        console.log("\n");
     }
 }
 
