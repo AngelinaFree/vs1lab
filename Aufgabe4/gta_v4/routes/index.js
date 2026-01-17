@@ -97,7 +97,6 @@ router.post('/api/geotags', (req, res) => {
   let longitude = parseFloat(req.body.longitude);
   let name = req.body.name;
   let hashtag = req.hashtag;
-
   if (latitude < -180 || latitude > 180) {
     latitude = undefined;
   }
@@ -117,7 +116,7 @@ router.post('/api/geotags', (req, res) => {
   
   const newGeoTag = geoTagStore.addGeoTag(new GeoTag (latitude, longitude, name, hashtag));
 
-  res.header('Location', '/api/geotags/${newGeoTag.getId()}').json(newGeoTag);
+  res.header('Location', `/api/geotags/${newGeoTag.getId()}`).json(newGeoTag);
 });
 
 
