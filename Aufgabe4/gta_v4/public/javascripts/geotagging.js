@@ -80,11 +80,10 @@ async function discovery() {
     const searchterm = document.getElementById("discoverySearch").value;
     const response = await fetch(serverURL + `/api/geotags?latitude=${latitude}&longitude=${longitude}&searchterm=${searchterm}`);
     taglist = await response.json();
-    console.log(taglist);
     updateTags(latitude, longitude);
     }
 
-    function updateTags(latitude, longitude) {
+function updateTags(latitude, longitude) {
     const uL =  document.getElementById("discoveryResults");
     const newUl = uL.cloneNode(false);
     taglist.forEach(element => {
