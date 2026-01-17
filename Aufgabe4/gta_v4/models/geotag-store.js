@@ -66,14 +66,13 @@ class InMemoryGeoTagStore{
         var searchedGeoTags = this.#geoTags;
         if (keyword) {
         keyword = keyword.toLowerCase();
-        searchedGeoTags = searchedGeoTags.filter(element => {
+        searchedGeoTags = this.#geoTags.filter(element => {
             return element.getName().toLowerCase().includes(keyword) ||
             element.getHashtag().toLowerCase().includes(keyword);
         });
         }
 
-        if (latitude && longitude) return this.getNearbyGeoTags(latitude, longitude, searchedGeoTags);
-
+        if (latitude && longitude && searchedGeoTags.length !== 0) return this.getNearbyGeoTags(latitude, longitude, searchedGeoTags);
         return searchedGeoTags;
     }
 
