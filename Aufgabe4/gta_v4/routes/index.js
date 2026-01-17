@@ -75,8 +75,6 @@ router.get('/api/geotags', (req, res) => {
   }
   
   const nearbyGeoTags = geoTagStore.searchNearbyGeoTags(searchTerm, latitude, longitude);
-  console.log(nearbyGeoTags);
-  console.log(searchTerm);
   res.json(nearbyGeoTags);
 });
 
@@ -97,7 +95,7 @@ router.post('/api/geotags', (req, res) => {
   let longitude = parseFloat(req.body.longitude);
   let name = req.body.name;
   let hashtag = req.body.hashtag;
-  
+
   if (latitude < -180 || latitude > 180) {
     latitude = undefined;
   }

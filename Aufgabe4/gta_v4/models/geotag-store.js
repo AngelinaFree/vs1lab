@@ -63,17 +63,16 @@ class InMemoryGeoTagStore{
         return all geotags with the given keyword. If coordinates are given, only getoags in the specified radius will be returned
     */
     searchNearbyGeoTags(keyword, latitude, longitude) {
-        var searchedGeoTags = this.#geoTags;
+        var searchedGeoTags;
         if (keyword) {
         keyword = keyword.toLowerCase();
-        searchedGeoTags = searchedGeoTags.filter(element => {
+        searchedGeoTags = this.#geoTags.filter(element => {
             return element.getName().toLowerCase().includes(keyword) ||
             element.getHashtag().toLowerCase().includes(keyword);
         });
         }
 
-        if (latitude && longitude) return this.getNearbyGeoTags(latitude, longitude, searchedGeoTags);
-
+        if (latitude && longitude && searchedGeoTags.length !== 0) return this.getNearbyGeoTags(latitude, longitude, searchedGeoTags);
         return searchedGeoTags;
     }
 
