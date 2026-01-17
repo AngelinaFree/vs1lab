@@ -80,21 +80,20 @@ async function discovery() {
     const searchterm = document.getElementById("discoverySearch").value;
     const response = await fetch(serverURL + `/api/geotags?latitude=${latitude}&longitude=${longitude}&searchterm=${searchterm}`);
     taglist = await response.json();
+    console.log(taglist);
     updateTags(latitude, longitude);
     }
 
     function updateTags(latitude, longitude) {
-    if(taglist.length) { 
-        const uL =  document.getElementById("discoveryResults");
-        const newUl = uL.cloneNode(false);
-        taglist.forEach(element => {
-            let li = document.createElement("li");
-            li.appendChild(document.createTextNode(`${element.name} (${element.latitude},${element.longitude}) ${element.hashtag}`));
-            newUl.appendChild(li);
-       });
-       uL.parentNode.replaceChild(newUl,uL);
-       mapManager.updateMarkers(latitude, longitude, taglist);
-    }
+    const uL =  document.getElementById("discoveryResults");
+    const newUl = uL.cloneNode(false);
+    taglist.forEach(element => {
+        let li = document.createElement("li");
+        li.appendChild(document.createTextNode(`${element.name} (${element.latitude},${element.longitude}) ${element.hashtag}`));
+        newUl.appendChild(li);
+    });
+    uL.parentNode.replaceChild(newUl,uL);
+    mapManager.updateMarkers(latitude, longitude, taglist);
 }
 // Wait for the page to fully load its DOM content, then call updateLocation
 document.addEventListener("DOMContentLoaded", () => {
