@@ -40,11 +40,7 @@ function updateLocation() {
                 document.getElementById("discoveryLatitude").value = latitude;
                 document.getElementById("discoveryLongitude").value = longitude;
                 mapManager.initMap(latitude, longitude);
-                fetch(serverURL + `/api/geotags?latitude=${latitude}&longtitude=${longitude}`)
-                .then(response => response.json())
-                .then(data => {
-                    mapManager.updateMarkers(latitude, longitude, data);
-                    })
+                mapManager.updateMarkers(latitude, longitude);
             });
 
         }
