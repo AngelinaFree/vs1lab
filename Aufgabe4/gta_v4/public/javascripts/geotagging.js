@@ -84,13 +84,13 @@ async function discovery() {
     }
 
     function updateTags(latitude, longitude) {
-        if(taglist.length) { 
-       const uL =  document.getElementById("discoveryResults");
-       const newUl = uL.cloneNode(false);
-       taglist.forEach(element => {
-        let li = document.createElement("li");
-        li.appendChild(document.createTextNode(`${element.name} (${element.latitude},${element.longitude}) ${element.hashtag}`));
-        newUl.appendChild(li);
+    if(taglist.length) { 
+        const uL =  document.getElementById("discoveryResults");
+        const newUl = uL.cloneNode(false);
+        taglist.forEach(element => {
+            let li = document.createElement("li");
+            li.appendChild(document.createTextNode(`${element.name} (${element.latitude},${element.longitude}) ${element.hashtag}`));
+            newUl.appendChild(li);
        });
        uL.parentNode.replaceChild(newUl,uL);
        mapManager.updateMarkers(latitude, longitude, taglist);
