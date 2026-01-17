@@ -111,6 +111,7 @@ router.post('/api/geotags', (req, res) => {
         stack: ''
       }
     });
+    return;
   }
   
   const newGeoTag = geoTagStore.addGeoTag(new GeoTag (latitude, longitude, name, hashtag));
@@ -140,6 +141,7 @@ router.get('/api/geotags/:id', (req, res) => {
         stack: ''
       }
     });
+    return;
   }
 
   res.json(geoTagStore.getGeoTagById(id));
@@ -171,6 +173,7 @@ router.put('/api/geotags/:id', (req, res) => {
         stack: ''
       }
     });
+    return;
   }
 
   const newLatitude = parseFloat(req.body.latitude);
@@ -197,6 +200,7 @@ router.put('/api/geotags/:id', (req, res) => {
         stack: ''
       }
     });
+    return;
   }
   
   res.json(geoTagStore.changeGeotagById(id, newLatitude, newLongitude, newName, newHashtag));
