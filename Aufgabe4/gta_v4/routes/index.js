@@ -189,8 +189,6 @@ router.put('/api/geotags/:id', (req, res) => {
 
   const newHashtag = req.body.hashtag;
 
-  console.log("TEST: " + newName + " & " + newHashtag + " & " + newLatitude + " & " + newLongitude );
-
   if ( !newName || (!newLatitude || !newLongitude)) {
     res.status(404);
     res.render("error", {
